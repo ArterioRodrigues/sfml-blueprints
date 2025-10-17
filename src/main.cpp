@@ -4,7 +4,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 int main() {
-  // Game game;
-  // game.run(6000);
+   Game game;
+   game.run(6000);
   return 0;
 }
