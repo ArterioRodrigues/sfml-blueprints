@@ -18,13 +18,12 @@ public:
   enum PlayerInputs { Up, Left, Right }; 
   static void setDefaultsInput();
 
+  bool _isMoving;
+  int _rotation;
 private:
   virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
   sf::RectangleShape _shape;
   sf::Vector2f _velocity;
-
-  bool _isMoving;
-  int _rotation;
 
   static ActionMap<int> _playerInputs;
 };

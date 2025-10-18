@@ -8,9 +8,10 @@ public:
   ActionMap<T> &operator=(const ActionMap<T> &) = delete;
 
   ActionMap() = default;
-  
-  void map(const T& key, const Action& action);
-  const Action& get(const T& key) const;
+
+  void map(const T &key, const Action &action) { _map.emplace(key, action); }
+  const Action get(const T &key) const { return _map.at(key); }
+
 private:
   std::unordered_map<T, Action> _map;
 };

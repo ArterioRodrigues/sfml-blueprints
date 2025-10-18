@@ -4,7 +4,7 @@
 #include <SFML/Window/Mouse.hpp>
 #include <cstring>
 
-Action::Action(const Action &other) : _event(other._event) {}
+Action::Action(const Action &other) : _type(other._type), _event(other._event) {}
 
 Action &Action::operator=(const Action &other) {
   _event = other._event;
