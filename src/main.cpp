@@ -1,10 +1,10 @@
-#include "../include/action.h"
-#include "../include/game.h"
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
+#include "action.h"
+#include "game.h"
+#include "pch.h"
 
 int main() {
-   Game game;
-   game.run(6000);
+  Player::setDefaultsInput();
+  Game game;
+  game.run();
   return 0;
 }

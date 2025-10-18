@@ -41,30 +41,30 @@ void Game::processEvents() {
       }
 
       else if (code == sf::Keyboard::Key::Up) {
-        _player.isMoving = true;
+        _player._isMoving = true;
       }
 
       else if (code == sf::Keyboard::Key::Left) {
-        _player.rotation = -1;
+        _player._rotation = -1;
       }
 
       else if (code == sf::Keyboard::Key::Right) {
-        _player.rotation = 1;
+        _player._rotation = 1;
       }
     }
 
     else if (event.is<sf::Event::KeyReleased>()) {
       sf::Keyboard::Key code = event.getIf<sf::Event::KeyReleased>()->code;
       if (code == sf::Keyboard::Key::Up) {
-        _player.isMoving = false;
+        _player._isMoving = false;
       }
 
       else if (code == sf::Keyboard::Key::Left) {
-        _player.rotation = 0;
+        _player._rotation = 0;
       }
 
       else if (code == sf::Keyboard::Key::Right) {
-        _player.rotation = 0;
+        _player._rotation = 0;
       }
     }
     optionalEvent = _window.pollEvent();

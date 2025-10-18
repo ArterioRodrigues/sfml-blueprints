@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 
+template <typename T> class ActionTarget;
+
 class Action {
 public:
   enum Type {
@@ -10,8 +12,8 @@ public:
   };
   Action(const Action &other);
 
-  Action(const sf::Keyboard::Key &key, int type=Type::RealTime|Type::Pressed);
-  Action(const sf::Mouse::Button &button, int type=Type::RealTime|Type::Pressed);
+  Action(const sf::Keyboard::Key &key, int type = Type::RealTime | Type::Pressed);
+  Action(const sf::Mouse::Button &button, int type = Type::RealTime | Type::Pressed);
 
   bool test() const;
 
@@ -21,7 +23,7 @@ public:
   Action &operator=(const Action &other);
 
 private:
-  friend class ActionTarget;
+  template <typename T> friend class ActionTarget;
   sf::Event _event;
   int _type;
 };
