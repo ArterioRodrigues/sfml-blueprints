@@ -1,8 +1,9 @@
+#include "configuration.h"
 #include "game.h"
 #include "pch.h"
 
 int main() {
-  Player::setDefaultsInput();
+  Configuration::initialize();
   Game game;
   game.run();
   return 0;

@@ -19,6 +19,7 @@ add_executable(main
   src/action.cpp
   src/game.cpp
   src/player.cpp
+  src/configuration.cpp
 )
 
 target_compile_features(main PRIVATE cxx_std_17)
