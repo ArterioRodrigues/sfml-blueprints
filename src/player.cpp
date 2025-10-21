@@ -1,4 +1,4 @@
-#include "../include/player.h"
+#include "player.h"
 #include "actionTarget.h"
 
 int TURNING_ANGLE = 180;
