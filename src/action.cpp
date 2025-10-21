@@ -1,8 +1,4 @@
-#include "../include/action.h"
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Window/Mouse.hpp>
-#include <cstring>
+#include "action.h"
 
 Action::Action(const Action &other) : _type(other._type), _event(other._event) {}
 

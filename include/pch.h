@@ -1,10 +1,13 @@
 #include <cmath>
 #include <iostream>
 #include <optional>
+#include <unordered_map>
 
 #include <functional>
 #include <list>
 #include <utility>
+#include <memory>
+#include <stdexcept>
 
 #include <SFML/Graphics.hpp>
 
@@ -22,3 +25,5 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
+
+#include <SFML/Audio.hpp>
