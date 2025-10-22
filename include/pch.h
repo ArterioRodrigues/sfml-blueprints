@@ -10,6 +10,7 @@
 #include <stdexcept>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>

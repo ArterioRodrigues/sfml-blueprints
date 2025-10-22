@@ -1,6 +1,7 @@
 #include "game.h"
+#include "configuration.h"
 
-Game::Game() : _window(sf::VideoMode(sf::Vector2u(800, 600)), "02_Game_Archi"), _player() {
+Game::Game() : _window(sf::VideoMode(sf::Vector2u(800, 600)), "02_Game_Archi"), _player(32, 32) {
   sf::Vector2f position(400, 300);
   _player.setPosition(position);
 }
@@ -22,6 +23,7 @@ void Game::run(int frame_per_seconds) {
     update(timeSinceLastUpdate);
     render();
   }
+
 }
 
 void Game::processEvents() {

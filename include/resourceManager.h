@@ -21,7 +21,7 @@ private:
   std::unordered_map<IDENTIFIER, std::unique_ptr<RESOURCE>> _map;
 };
 
-template < typename IDENTIFIER> class ResourceManager<sf::Music, IDENTIFIER>{
+template <typename IDENTIFIER> class ResourceManager<sf::Music, IDENTIFIER> {
 public:
   ResourceManager(const ResourceManager &) = delete;
   ResourceManager &operator=(const ResourceManager &) = delete;
