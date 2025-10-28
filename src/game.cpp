@@ -1,7 +1,9 @@
 #include "game.h"
 #include "configuration.h"
 
-Game::Game() : _window(sf::VideoMode(sf::Vector2u(800, 600)), "02_Game_Archi"), _player(32, 32) {
+Game::Game(int x, int y)
+    : _player(*Configuration::world), _window(sf::VideoMode(sf::Vector2u(x, y)), "03_Asteriod"),
+      _x(x), _y(y) {
   sf::Vector2f position(400, 300);
   _player.setPosition(position);
 }
@@ -10,20 +12,18 @@ void Game::run(int frame_per_seconds) {
   sf::Clock clock;
   sf::Time timeSinceLastUpdate = sf::Time::Zero;
   sf::Time TIME_PER_FRAME = sf::seconds(1.f / frame_per_seconds);
-
   while (_window.isOpen()) {
-    processEvents();
-    timeSinceLastUpdate += clock.restart();
+     processEvents();
+     timeSinceLastUpdate += clock.restart();
 
-    while (timeSinceLastUpdate > TIME_PER_FRAME) {
-      timeSinceLastUpdate -= TIME_PER_FRAME;
-      update(TIME_PER_FRAME);
-    }
+     while (timeSinceLastUpdate > TIME_PER_FRAME) {
+       timeSinceLastUpdate -= TIME_PER_FRAME;
+       update(TIME_PER_FRAME);
+     }
 
-    update(timeSinceLastUpdate);
-    render();
+     update(timeSinceLastUpdate);
+     render();
   }
-
 }
 
 void Game::processEvents() {
@@ -73,7 +73,23 @@ void Game::processEvents() {
   }
 }
 
-void Game::update(sf::Time deltaTime) { _player.update(deltaTime); }
+void Game::update(sf::Time deltaTime) {
+  _player.update(deltaTime);
+  sf::Vector2f playerPosition = _player.getPosition();
+  if (playerPosition.x < 0) {
+    playerPosition.x = _x;
+    playerPosition.y = _y - playerPosition.y;
+  } else if (playerPosition.x > _x) {
+    playerPosition.x = 0;
+    playerPosition.y = _y - playerPosition.y;
+  }
+
+  if (playerPosition.y < 0) {
+    playerPosition.y = _y;
+  } else if (playerPosition.y > _y) {
+    _player.setPosition(playerPosition);
+  }
+}
 
 void Game::render() {
   _window.clear();

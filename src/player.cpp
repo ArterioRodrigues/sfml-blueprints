@@ -1,40 +1,45 @@
 #include "player.h"
-#include "actionTarget.h"
+#include "action.h"
+#include "collision.h"
+#include "shoot.h"
+#include "shootPlayer.h"
 #include "configuration.h"
-#include <SFML/Graphics/Rect.hpp>
+#include "helpers.h"
+#include "shootPlayer.h"
 #include <SFML/System/Vector2.hpp>
 
-int TURNING_ANGLE = 180;
-
-Player::Player()
+Player::Player(World &world)
     : ActionTarget<int>(Configuration::playerInputs),
-      _ship(Configuration::textures.get(Configuration::Textures::Player)), _isMoving(false),
-      _rotation(0) {
-
-  _ship.setOrigin(sf::Vector2f(0, 0));
+      Entity(Configuration::Textures::Player, world), _isMoving(false), _rotation(0) {
 
   bind(Configuration::PlayerInputs::Up, [this](const sf::Event &) { _isMoving = true; });
   bind(Configuration::PlayerInputs::Left, [this](const sf::Event &) { _rotation -= 1; });
   bind(Configuration::PlayerInputs::Right, [this](const sf::Event &) { _rotation += 1; });
+  bind(Configuration::PlayerInputs::Shoot, [this](const sf::Event &) { shoot(); });
+  bind(Configuration::PlayerInputs::Hyperspace, [this](const sf::Event &) { goToHyperspace(); });
 }
-Player::Player(int frameWidth, int frameHeight, int totalFrames, int timePerFrame)
-    : ActionTarget<int>(Configuration::playerInputs),
-      _ship(Configuration::textures.get(Configuration::Textures::PlayerSprite)), _isMoving(false),
-      _rotation(0) {
 
-  _currentFrame = 0;
-  _frameWidth = frameWidth;
-  _frameHeight = frameHeight;
-  _timePerFrame = timePerFrame;
-  _animationTimer = 0.0f;
-  _totalFrames = totalFrames;
+bool Player::isCollide(const Entity &other) const {
+  if (dynamic_cast<const ShootPlayer *>(&other) == nullptr) {
+    // Sprite is in protected may need to changes
+    return Collision::circleTest(_sprite, other._sprite);
+  }
+  return false;
+}
 
-  _ship.setOrigin(sf::Vector2f(0, 0));
-  _ship.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
+void Player::shoot() {
+  if (_timeSinceLastShoot > sf::seconds(0.3)) {
 
-  bind(Configuration::PlayerInputs::Up, [this](const sf::Event &) { _isMoving = true; });
-  bind(Configuration::PlayerInputs::Left, [this](const sf::Event &) { _rotation -= 1; });
-  bind(Configuration::PlayerInputs::Right, [this](const sf::Event &) { _rotation += 1; });
+    _world.add(new ShootPlayer(*this));
+    _timeSinceLastShoot = sf::Time::Zero;
+  }
+}
+
+void Player::goToHyperspace() {
+  _impulse = sf::Vector2f(0, 0);
+  sf::Vector2f position = sf::Vector2f(randomTemplate<int>(0, _world.getX()), randomTemplate<int>(0, _world.getY()));
+  setPosition(position);
+  //_world.add(Configuration::SoundBuffers::Jump);
 }
 
 void Player::processEvent() {
@@ -45,35 +50,22 @@ void Player::processEvent() {
 
 void Player::update(sf::Time deltaTime) {
   float seconds = deltaTime.asSeconds();
+  _timeSinceLastShoot += deltaTime;
+
   if (_rotation != 0) {
-    sf::Angle angle = sf::degrees((_rotation > 0 ? 1 : -1) * TURNING_ANGLE * seconds);
-    _ship.rotate(angle);
+    sf::Angle angle = sf::degrees((_rotation > 0 ? 1 : -1) * 250 * seconds);
+    _sprite.rotate(angle);
   }
+
   if (_isMoving) {
-    float angle = (_ship.getRotation().asDegrees() / TURNING_ANGLE * M_PI) - (M_PI / 2);
-    _velocity += sf::Vector2f(std::cos(angle), std::sin(angle)) * 60.f * seconds;
-  } else {
-    _velocity = sf::Vector2f(0, 0);
+    float angle = _sprite.getRotation().asDegrees()/ 180 * M_PI - M_PI / 2;
+    _impulse += sf::Vector2f(std::cos(angle), std::sin(angle)) * 300.f * seconds;
   }
-
-  _ship.move(seconds * _velocity);
-
-  _animationTimer += deltaTime.asMicroseconds();
-  if (_isMoving && _animationTimer > _timePerFrame) {
-    _animationTimer = 0.0f;
-    _currentFrame = (_currentFrame + 1) % _totalFrames - 1;
-    int column = _currentFrame * _frameWidth;
-    _ship.setTextureRect(sf::IntRect({column, 0}, {_frameWidth, _frameHeight}));
-  } else if(_isMoving) { 
-    int column = _currentFrame * _frameWidth;
-    _ship.setTextureRect(sf::IntRect({_currentFrame, 0}, {_frameWidth, _frameHeight}));
-  }
-  else {
-    int column = 3 * _frameWidth;
-    _ship.setTextureRect(sf::IntRect({column, 0}, {_frameWidth, _frameHeight}));
-  }
+  _sprite.move(seconds * _impulse);
 }
 
-void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-  target.draw(_ship, states);
+void Player::onDestroy() {
+  Entity::onDestroy();
+  Configuration::lives--;
+  //_world.add(Configuration::SoundBuffers::Boom);
 }

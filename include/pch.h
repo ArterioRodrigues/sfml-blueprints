@@ -8,6 +8,8 @@
 #include <utility>
 #include <memory>
 #include <stdexcept>
+#include <random>
+#include <chrono>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -28,3 +30,11 @@
 #include <SFML/Window/Event.hpp>
 
 #include <SFML/Audio.hpp>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+
+
+class World;
+class Entity;
+template <typename T> class ActionTarget;
+

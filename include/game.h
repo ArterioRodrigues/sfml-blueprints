@@ -6,7 +6,7 @@ class Game {
 public:
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;
-  Game();
+  Game(int x = 800, int y = 600);
   void run(int frame_per_seconds = 6000);
 
 private:
@@ -16,4 +16,6 @@ private:
 
   sf::RenderWindow _window;
   Player _player;
+  int _x;
+  int _y;
 };

@@ -25,7 +25,7 @@ public:
   }
 
   void processEvents() const {
-    for (auto &pair: _eventsRealTime) {
+    for (auto &pair : _eventsRealTime) {
       Action action = _actionMap.get(pair.first);
       if (action.test()) {
         pair.second(action._event);

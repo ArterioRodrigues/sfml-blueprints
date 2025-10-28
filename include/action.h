@@ -1,8 +1,6 @@
 #pragma once
 #include "pch.h"
 
-template <typename T> class ActionTarget;
-
 class Action {
 public:
   enum Type {
